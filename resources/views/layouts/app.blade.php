@@ -9,34 +9,44 @@
 <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 <body class="bg-blue-300">
-    <nav class="p-6 bg-transparent flex justify-between mb-6">
+    @if (!Auth::guest())
+    <nav class="p-6 bg-transparent flex justify-between mb-6 text-gray-600 text-lg">
         <ul class="flex items-center">
             <li>
-                <a href="" class="p-3  hover:bg-red-700 rounded-lg">Home</a>
+                <a href="{{ route('tasks') }}" class="p-3  hover:bg-red-700 rounded-lg">All tasks</a>
             </li>
             <li>
-                <a href="" class="p-3">Dashboard</a>
+                <a href="" class="p-3">My tasks</a>
             </li>
+            @if (auth()->user()->admin)
             <li>
-                <a href="" class="p-3">Tasks</a>
+                <a href="{{ route('register') }}" class="p-3">Add new user</a>
             </li>
+            @endif
+            
         </ul>
 
         <ul class="flex items-center">
-            <li>
-                <a href="" class="p-3">Damir Mandić</a>
-            </li>
-            <li>
-                <a href="" class="p-3">Login</a>
-            </li>
-            <li>
-                <a href="" class="p-3">Register</a>
-            </li>
-            <li>
-                <a href="" class="p-3">Logout</a>
-            </li>
+            @auth
+                <li>
+                <a href="" class="p-3">{{ auth()->user()->name }}</a>
+                </li> 
+                <li>
+                    <form action="{{ route('logout') }}" method="post" class="inline p-3">
+                        @csrf
+                        <button type="submit">Logout</button>
+                    </form>
+                </li>
+            @endauth
+            @guest
+                <li>
+                    <a href="{{ route('login') }}" class="p-3">Login</a>
+                </li>            
+            @endguest
         </ul>
     </nav>
+    @endif
+    
 
     @yield('content')
 </body>
